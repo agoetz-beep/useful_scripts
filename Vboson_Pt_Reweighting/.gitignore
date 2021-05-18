@@ -1,0 +1,6 @@
+*.sub
+*arraySubmit.sh
+*.png
+*.pdf
+*.root
+*.pyc

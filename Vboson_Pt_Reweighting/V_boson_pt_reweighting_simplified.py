@@ -73,6 +73,13 @@ binning = [
 # nominal histogram
 v_boson_pt_hist = ROOT.TH1D(boson + "_boson_pt", boson + "_boson_pt", len(binning) - 1, array("d", binning))
 v_boson_pt_hist.Sumw2()
+v_boson_pt_hist_to1TeV=ROOT.TH1D(boson + "_boson_pt_to1TeV", boson + "_boson_pt_to1TeV",20,0,1000)
+v_boson_pt_hist_to1TeV.Sumw2()
+v_boson_eta_hist = ROOT.TH1D(boson + "_boson_eta", boson + "_boson_eta",50, -10, 10)
+v_boson_eta_hist.Sumw2()
+v_boson_phi_hist = ROOT.TH1D(boson + "_boson_phi", boson + "_boson_phi",50, -3.14, 3.14)
+v_boson_phi_hist.Sumw2()
+
 file_ = ROOT.TFile(boson + "_boson_pt_" + era + "_" + postfix + ".root", "RECREATE")
 
 count = 0
@@ -249,11 +256,29 @@ for filename in filenames:
             print ("only W or Z boson or Photon allowed")
             exit()
         v_boson_pt = v_boson.pt()
+        v_boson_eta = v_boson.eta()
+        v_boson_phi = v_boson.phi()
+        
         # print (v_boson_pt)
         # fill the vector boson pt
+        
         v_boson_pt_hist.Fill(v_boson_pt, weight * weight_xs / 1000.0)
+        v_boson_pt_hist_to1TeV.Fill(v_boson_pt, weight * weight_xs / 1000.0)
+        v_boson_eta_hist.Fill(v_boson_eta, weight * weight_xs / 1000.0)
+        v_boson_phi_hist.Fill(v_boson_phi, weight * weight_xs / 1000.0)
+        
+        
 
 # write all to a file
+file_.WriteTObject(v_boson_eta_hist)
+file_.WriteTObject(v_boson_phi_hist)
+#canvas=ROOT.TCanvas("canvas","canvas",1500,1000)
+#canvas.SetLogy(1)
 file_.WriteTObject(v_boson_pt_hist)
+#canvas.Clear()
+#canvas.SetLogy(1)
+file_.WriteTObject(v_boson_pt_hist_to1TeV)
+
+
 file_.Close()
 print ("finished")

@@ -9,7 +9,7 @@ import sys
 from DataFormats.FWLite import Events, Handle
 # import math package functionalities
 from math import *
-
+ROOT.gROOT.SetBatch(True)
 
 # function to find out whether a is an ancestor of p
 def isAncestor(a,p) :
@@ -46,14 +46,16 @@ labelPruned = ("prunedGenParticles")
 # label to retrieve packed generator particles
 labelPacked = ("packedGenParticles")
 
-mass=ROOT.TH1D("mass_histogram", "mass_distribution;mass of particle;fequency",100,0,150)
-mass_charge=ROOT.TH2D("mass_charge_graph", "mass_charge_chart;mass of particle;charge of particle",100,0,150,2,-1,1)
-
-pt_Z_boson=ROOT.TH1D("pt_Z", "transverse momentum distribution of Z boson;transverse momentum; frequency",500,0,420)
+mass=ROOT.TH1D("mass_histogram", "mass_distribution;mass of particle (GeV);fequency",10,1,91)
+mass_charge=ROOT.TH2D("mass_charge_histogram_pruned", "mass_charge_histogram_pruned;mass of particle (GeV);charge of particle (e)",1000,0.0001,1,5,-2.5,2.5)
+mass_charge_withZ=ROOT.TH2D("mass_charge_histogram_pruned_withZ", "mass_charge_histogram_pruned;mass of particle (GeV);charge of particle (e)",1000,1,100,5,-2.5,2.5)
+mass_charge_packed=ROOT.TH2D("mass_charge_packed_particles", "mass_charge_packed_particles;mass of particle (GeV);charge of particle (e)",1000,0.0001,1.4,5,-2.5,2.5)
+pt_Z_boson=ROOT.TH1D("pt_Z", "transverse momentum distribution of Z boson;transverse momentum (GeV); frequency",21,0,420)
 
 # loop over events
+#cnt=0
 for counter,event in enumerate(events):
-    if counter > 1000:
+    if counter > 10000:
         break
     #print(" ")
     #print("========================================= Event {} =========================================".format(counter))
@@ -70,37 +72,83 @@ for counter,event in enumerate(events):
     # loop over pruned generator particles
     #print("---------- Most important generator particles (prundGenParticles) ----------")
     #print(" ")
+    
     for i,p in enumerate(pruned) :
-        #print("#{}   PdgId: {}      pt: {:.2f}      eta: {:.2f}      phi: {:.2f}      m: {:.2f}     e: {:.2f}       px: {:.2f}        py: {:.2f}        pz: {:.2f}         status: {}         charge: {}".format(i,p.pdgId(),p.pt(),p.eta(),p.phi(),p.mass(),p.energy(),p.px(),p.py(),p.pz(),p.status(), p.charge()))
-	mass.Fill(p.mass())
-	mass_charge.Fill(p.mass(), p.charge())
+        mass.Fill(p.mass())
+        mass_charge.Fill(p.mass(), p.charge())
+        mass_charge_withZ.Fill(p.mass(), p.charge())
 
-	if p.pdgId()== 23:
-		pt_Z_boson.Fill(p.pt())
-
-	
+        if p.pdgId()== 23:
+            pt_Z_boson.Fill(p.pt())
+            
+    
+    
+        #if p.mass()< 0.15 and p.mass()> 0.1:
+          #  if p.pdgId() == 111:
+           #     print("PdgId: ",p.pdgId(),"   ", "mass: ", p.mass(), "   ", "Pion_0")
+            #
+            #elif p.pdgId() == 211:
+             #   print("PdgId: ",p.pdgId(),"   ", "mass: ", p.mass(), "   ", "Pion_+")
+            
+            #elif p.pdgId() == -211:
+             #   print("PdgId: ",p.pdgId(),"   ", "mass: ", p.mass(), "   ", "Pion_-")
+            #
+            #else:
+             #   print("PdgId: ",p.pdgId(),"   ", "mass: ", p.mass(), "   ", "anderes Teilchen")
+           
+       # if p.mass()>1 and p.mass()< 1.2:
+           # print(p.pdgId(), p.mass(), p.charge(), p.status())
+           # cnt+=1
+        
+        #else:
+           # print("nicht der richtige Energiebereich")
+            
         #mothers = FindAllMothers(p)
         #print("mothers")
         #print(mothers)
         #print("daughters")
-        #for pa in packed:
-            #mother = pa.mother(0)
-            #if mother and isAncestor(p,mother) :
-                #print("     PdgId : %s   pt : %s  eta : %s   phi : %s m : %s e: %s px: %s py: %s pz: %s" %(pa.pdgId(),pa.pt(),pa.eta(),pa.phi(),pa.mass(),pa.energy(),pa.px(),pa.py(),pa.pz()))
+    for pa in packed:
+        mass_charge_packed.Fill(pa.mass(), pa.charge())
+        mother = pa.mother(0)
+        
+        if p.mass()> 1.19999 and p.mass()< 1.2:
+            print(p.pdgId(), p.mass(), p.charge(), p.status())
+        #print("     PdgId : %s   pt : %s  eta : %s   phi : %s m : %s e: %s px: %s py: %s pz: %s status: %s"%         #(pa.pdgId(),pa.pt(),pa.eta(),pa.phi(),pa.mass(),pa.energy(),pa.px(),pa.py(),pa.pz(), pa.status()))
 
-#mit Klasse TH1D-----------------------------------------------------------------------------------------
-#TH1D *mass = new TH1D("mass_histogram", "mass distribution", 100, 0, 150);
-#TH1D* mass=new TH1D("mass_histogram", "mass_distribution;mass of particle;fequency",100,0,150);
-#mass->Fill(p.mass());
+        
+            
+#print("Teilchen in diesem Massenbereich: ", cnt)
 
+ROOT.gStyle.SetOptStat(0)
+canvas=ROOT.TCanvas("canvas","canvas",1500,1000)
+canvas.SetLogx(1)
 mass.SetFillColor(3)
 mass.Draw()
-#mass_charge.SetLineColor(3)
+canvas.Print("mass.pdf")
+
+canvas.Clear()
+canvas.SetLogx(1)
 mass_charge.Draw()
+canvas.Print("mass_charge.pdf")
+canvas.Clear()
+
+canvas_2=ROOT.TCanvas("canvas_2","canvas_2",1500,1000)
 pt_Z_boson.SetFillColor(4)
 pt_Z_boson.Draw()
+canvas_2.Print("pt_Z_boson.pdf")
 
-raw_input("test")
+canvas.Clear()
+canvas.SetLogx(1)
+mass_charge_packed.Draw()
+canvas.Print("mass_charge_packed.pdf")
+canvas.Clear()
+
+canvas.Clear()
+canvas.SetLogx(1)
+mass_charge_withZ.Draw()
+canvas.Print("mass_charge_withZ.pdf")
+canvas.Clear()
 
 
+#print("#{}   PdgId: {}      pt: {:.2f}      eta: {:.2f}      phi: {:.2f}      m: {:.2f}     e: {:.2f}       px: {:.2f}        py: {:.2f}        pz: {:.2f}         status: {}         charge: {}".format(i,p.pdgId(),p.pt(),p.eta(),p.phi(),p.mass(),p.energy(),p.px(),p.py(),p.pz(),p.status(), p.charge()))
 

@@ -91,13 +91,13 @@ def print_shell_script(boson, postfix, files, era):
     script += "#!/bin/bash\n"
     script += "export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch\n"
     script += "source $VO_CMS_SW_DIR/cmsset_default.sh\n"
-    script += "cd /nfs/dust/cms/user/mwassmer/MonoTop/test/slc7/CMSSW_10_2_18/src\n"
+    script += "cd /nfs/dust/cms/user/agoetz/CMSSW_10_2_18/src\n"
     script += "eval `scram runtime -sh`\n"
     if not os.path.isdir("root_files"):
         os.mkdir("root_files")
-    script += "cd /nfs/dust/cms/user/mwassmer/MonoTop/useful_scripts/Vboson_Pt_Reweighting/root_files\n"
+    script += "cd /nfs/dust/cms/user/agoetz/useful_scripts/Vboson_Pt_Reweighting/root_files\n"
     script += (
-        "python /nfs/dust/cms/user/mwassmer/MonoTop/useful_scripts/Vboson_Pt_Reweighting/V_boson_pt_reweighting.py "
+        "python /nfs/dust/cms/user/agoetz/useful_scripts/Vboson_Pt_Reweighting/V_boson_pt_reweighting_simplified.py "
         + era
         + " "
         + boson
