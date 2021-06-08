@@ -18,10 +18,13 @@ handlePruned = Handle("std::vector<reco::GenParticle>")
 handlePacked = Handle("std::vector<pat::PackedGenParticle>")
 eventinfo = Handle("GenEventInfoProduct")
 lheinfo = Handle("LHEEventProduct")
+handleJets = Handle("std::vector<reco::GenJet>")
 labelPruned = "prunedGenParticles"
 labelPacked = "packedGenParticles"
 labelWeight = "generator"
 labelLHE = "externalLHEProducer"
+labelJets = "slimmedGenJets"
+
 
 # binning according to https://arxiv.org/pdf/1705.04664.pdf
 binning = [
@@ -70,15 +73,108 @@ binning = [
     6500,
 ]
 
+neue_bin_grenzen=[ 
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    200,
+    250,
+    300,
+    350,
+    400,
+    500,
+    650,
+    1000]
+neue_bins=array("d", neue_bin_grenzen)
+
 # nominal histogram
 v_boson_pt_hist = ROOT.TH1D(boson + "_boson_pt", boson + "_boson_pt", len(binning) - 1, array("d", binning))
 v_boson_pt_hist.Sumw2()
-v_boson_pt_hist_to1TeV=ROOT.TH1D(boson + "_boson_pt_to1TeV", boson + "_boson_pt_to1TeV",20,0,1000)
+v_boson_pt_hist_to1TeV=ROOT.TH1D(boson + "_boson_pt_to1TeV", boson + "_boson_pt_to1TeV",len(neue_bin_grenzen) - 1,neue_bins)
 v_boson_pt_hist_to1TeV.Sumw2()
-v_boson_eta_hist = ROOT.TH1D(boson + "_boson_eta", boson + "_boson_eta",50, -10, 10)
+v_boson_eta_hist = ROOT.TH1D(boson + "_boson_eta", boson + "_boson_eta",20, -10, 10)
 v_boson_eta_hist.Sumw2()
-v_boson_phi_hist = ROOT.TH1D(boson + "_boson_phi", boson + "_boson_phi",50, -3.14, 3.14)
+v_boson_phi_hist = ROOT.TH1D(boson + "_boson_phi", boson + "_boson_phi",20, -3.14, 3.14)
 v_boson_phi_hist.Sumw2()
+jets_fuehrende_Ordnung_pt_hist = ROOT.TH1D(boson + "_jets_fuehrende_Ordnung_pt",boson + "_jets_fuehrende_Ordnung_pt",len(neue_bin_grenzen) - 1,neue_bins)
+jets_fuehrende_Ordnung_pt_hist.Sumw2()
+jets_fuehrende_Ordnung_eta_hist=ROOT.TH1D(boson + "_jets_fuehrende_Ordnung_eta",boson + "_jets_fuehrende_Ordnung_eta", 20, -10,10) 
+jets_fuehrende_Ordnung_eta_hist.Sumw2()
+jets_anzahl_hist=ROOT.TH1D(boson + "_jets_anzahl", boson + "_jets_anzahl", 20, -0.5, 19.5)
+jets_anzahl_hist.Sumw2()
+jets_HT_hist=ROOT.TH1D(boson + "_jets_HT", boson + "_jets_HT", len(neue_bin_grenzen) - 1,neue_bins)
+jets_HT_hist.Sumw2()
+v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist=ROOT.TH1D(boson + "_boson_jets_fuehrende_Ordnung_DeltaPhi", boson + "_boson_jets_fuehrende_Ordnung_DeltaPhi", 20, 0, 3.14)
+v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist.Sumw2()
+w_boson_transverse_mass_hist = ROOT.TH1D(boson + "_boson_transverse_mass", boson + "_boson_transverse_mass", 20, 0,100)
+w_boson_transverse_mass_hist.Sumw2()
+v_boson_jets_fuehrende_Ordnung_pt_hist2D = ROOT.TH2D(boson + "_boson_jets_fuehrende_Ordnung_pt_2D", boson + "_boson_jets_fuehrende_Ordnung_pt_2D",len(neue_bin_grenzen) - 1,neue_bins,len(neue_bin_grenzen) - 1,neue_bins)
+v_boson_jets_fuehrende_Ordnung_pt_hist2D.Sumw2()
+v_boson_pt_DeltaPhi_hist2D = ROOT.TH2D(boson + "_boson_pt_DeltaPhi_2D", boson + "_boson_pt_DeltaPhi_2D", len(neue_bin_grenzen) - 1,neue_bins, 20, 0, 3.14)
+v_boson_pt_DeltaPhi_hist2D.Sumw2()
+jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D = ROOT.TH2D(boson + "_jets_fuehrende_Ordnung_pt_DeltaPhi_2D", boson + "_jets_fuehrende_Ordnung_pt_DeltaPhi_2D", len(neue_bin_grenzen) - 1,neue_bins, 20, 0, 3.14)
+jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D.Sumw2()
+jets_anzahl_HT_hist2D = ROOT.TH2D(boson + "_jets_anzahl_HT_2D", boson + "_jets_anzahl_HT_2D", 20, -0.5, 19.5, len(neue_bin_grenzen) - 1,neue_bins)
+jets_anzahl_HT_hist2D.Sumw2()
+w_boson_transverse_mass_pt_hist2D = ROOT.TH2D(boson + "_boson_transverse_mass_pt_2D", boson + "_boson_transverse_mass_pt_2D", 20,0,100,len(neue_bin_grenzen) - 1,neue_bins)
+w_boson_transverse_mass_pt_hist2D.Sumw2()
+w_boson_transverse_mass_phizwlundnu_hist2D=ROOT.TH2D(boson + "_boson_transverse_mass_phizwlundnu_2D", boson + "_boson_transverse_mass_phizwlundnu_2D", 20,0,100, 20,0,3.14)
+w_boson_transverse_mass_phizwlundnu_hist2D.Sumw2()
+v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D=ROOT.TH3D(boson + "_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_3D", boson +"_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_3D", len(neue_bin_grenzen) - 1,neue_bins, len(neue_bin_grenzen) - 1,neue_bins,20,0,3.14)
+v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D.Sumw2()
+v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D=ROOT.TH3D(boson+ "_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_3D", boson + "_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_3D", len(neue_bin_grenzen) - 1,neue_bins,len(neue_bin_grenzen) - 1,neue_bins,20,-0.5,19.5)
+v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D.Sumw2()
+v_boson_pt_DeltaPhi_anzahl_hist3D=ROOT.TH3D(boson + "_boson_pt_DeltaPhi_anzahl_3D", boson + "_boson_pt_DeltaPhi_anzahl_3D", len(neue_bin_grenzen) - 1,neue_bins,20,0,3.14,20,-0.5,19.5)
+v_boson_pt_DeltaPhi_anzahl_hist3D.Sumw2()
+
+v_boson_pt_hist_ana = ROOT.TH1D(boson + "_boson_pt_ana", boson + "_boson_pt_ana", len(binning) - 1, array("d", binning))
+v_boson_pt_hist_ana.Sumw2()
+v_boson_pt_hist_to1TeV_ana=ROOT.TH1D(boson + "_boson_pt_to1TeV_ana", boson + "_boson_pt_to1TeV_ana",len(neue_bin_grenzen) - 1,neue_bins)
+v_boson_pt_hist_to1TeV_ana.Sumw2()
+v_boson_eta_hist_ana = ROOT.TH1D(boson + "_boson_eta_ana", boson + "_boson_eta_ana",20, -10, 10)
+v_boson_eta_hist_ana.Sumw2()
+v_boson_phi_hist_ana = ROOT.TH1D(boson + "_boson_phi_ana", boson + "_boson_phi_ana",20, -3.14, 3.14)
+v_boson_phi_hist_ana.Sumw2()
+jets_fuehrende_Ordnung_pt_hist_ana = ROOT.TH1D(boson + "_jets_fuehrende_Ordnung_pt_ana",boson + "_jets_fuehrende_Ordnung_pt_ana", 20, 0, 1000)
+jets_fuehrende_Ordnung_pt_hist_ana.Sumw2()
+jets_fuehrende_Ordnung_eta_hist_ana=ROOT.TH1D(boson + "_jets_fuehrende_Ordnung_eta_ana",boson + "_jets_fuehrende_Ordnung_eta_ana", 20, -10,10) 
+jets_fuehrende_Ordnung_eta_hist_ana.Sumw2()
+jets_anzahl_hist_ana=ROOT.TH1D(boson + "_jets_anzahl_ana", boson + "_jets_anzahl_ana", 20, -0.5, 19.5)
+jets_anzahl_hist_ana.Sumw2()
+jets_HT_hist_ana=ROOT.TH1D(boson + "_jets_HT_ana", boson + "_jets_HT_ana", len(neue_bin_grenzen) - 1,neue_bins)
+jets_HT_hist_ana.Sumw2()
+v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist_ana=ROOT.TH1D(boson + "_boson_jets_fuehrende_Ordnung_DeltaPhi_ana", boson + "_boson_jets_fuehrende_Ordnung_DeltaPhi_ana", 20, 0, 3.14)
+v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist_ana.Sumw2()
+w_boson_transverse_mass_hist_ana = ROOT.TH1D(boson + "_boson_transverse_mass_ana", boson + "_boson_transverse_mass_ana", 20, 0,100)
+w_boson_transverse_mass_hist_ana.Sumw2()
+v_boson_jets_fuehrende_Ordnung_pt_hist2D_ana = ROOT.TH2D(boson + "_boson_jets_fuehrende_Ordnung_pt_2D_ana", boson + "_boson_jets_fuehrende_Ordnung_pt_2D_ana",len(neue_bin_grenzen) - 1,neue_bins,len(neue_bin_grenzen) - 1,neue_bins)
+v_boson_jets_fuehrende_Ordnung_pt_hist2D_ana.Sumw2()
+v_boson_pt_DeltaPhi_hist2D_ana = ROOT.TH2D(boson + "_boson_pt_DeltaPhi_2D_ana", boson + "_boson_pt_DeltaPhi_2D_ana", len(neue_bin_grenzen) - 1,neue_bins, 20, 0, 3.14)
+v_boson_pt_DeltaPhi_hist2D_ana.Sumw2()
+jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D_ana = ROOT.TH2D(boson + "_jets_fuehrende_Ordnung_pt_DeltaPhi_2D_ana", boson + "_jets_fuehrende_Ordnung_pt_DeltaPhi_2D_ana", len(neue_bin_grenzen) - 1,neue_bins, 20, 0, 3.14)
+jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D_ana.Sumw2()
+jets_anzahl_HT_hist2D_ana = ROOT.TH2D(boson + "_jets_anzahl_HT_2D_ana", boson + "_jets_anzahl_HT_2D_ana", 20, -0.5, 19.5, len(neue_bin_grenzen) - 1,neue_bins)
+jets_anzahl_HT_hist2D_ana.Sumw2()
+w_boson_transverse_mass_pt_hist2D_ana = ROOT.TH2D(boson + "_boson_transverse_mass_pt_2D_ana", boson + "_boson_transverse_mass_pt_2D_ana", 20,0,100, len(neue_bin_grenzen) - 1,neue_bins)
+w_boson_transverse_mass_pt_hist2D_ana.Sumw2()
+w_boson_transverse_mass_phizwlundnu_hist2D_ana=ROOT.TH2D(boson + "_boson_transverse_mass_phizwlundnu_2D_ana", boson + "_boson_transverse_mass_phizwlundnu_2D_ana", 20,0,100, 20,0,3.14)
+w_boson_transverse_mass_phizwlundnu_hist2D_ana.Sumw2()
+v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D_ana=ROOT.TH3D(boson + "_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_3D_ana", boson + "_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_3D_ana", len(neue_bin_grenzen) - 1,neue_bins, len(neue_bin_grenzen) - 1,neue_bins,20,0,3.14)
+v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D_ana.Sumw2()
+v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D_ana=ROOT.TH3D(boson+ "_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_3D_ana", boson + "_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_3D_ana", len(neue_bin_grenzen) - 1,neue_bins,len(neue_bin_grenzen) - 1,neue_bins,20,-0.5,19.5)
+v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D_ana.Sumw2()
+v_boson_pt_DeltaPhi_anzahl_hist3D_ana=ROOT.TH3D(boson + "_boson_pt_DeltaPhi_anzahl_3D_ana", boson + "_boson_pt_DeltaPhi_anzahl_3D_ana",len(neue_bin_grenzen) - 1,neue_bins,20,0,3.14,20,-0.5,19.5)
+v_boson_pt_DeltaPhi_anzahl_hist3D_ana.Sumw2()
 
 file_ = ROOT.TFile(boson + "_boson_pt_" + era + "_" + postfix + ".root", "RECREATE")
 
@@ -111,7 +207,6 @@ for filename in filenames:
             weight_xs = subsubdict.get("sigma", None) / (subsubdict.get("X", None) * subsubdict.get("N_gen", None))
     weight_xs *= 1000.0
     print ("weight_xs = ", weight_xs)
-
     # loop over events
     events = Events(filename)
     for event in events:
@@ -121,10 +216,14 @@ for filename in filenames:
         event.getByLabel(labelPruned, handlePruned)
         event.getByLabel(labelWeight, eventinfo)
         event.getByLabel(labelLHE, lheinfo)
+        event.getByLabel(labelJets, handleJets)
         # get the products (prunedGenParticles collection, GenEventInfoProduct and LHEEventProduct)
         pruned = handlePruned.product()
         weight = eventinfo.product().weight()
         lhe_weight = lheinfo.product().originalXWGTUP()
+        jets = handleJets.product()
+        njets = jets.size()
+        #print(jets[0].pt())
         # list for decay products of W or Z boson
         decay_prods = []
         # list for photons either for photon+jets events or for radiated photons to add back to charged leptons
@@ -258,6 +357,11 @@ for filename in filenames:
         v_boson_pt = v_boson.pt()
         v_boson_eta = v_boson.eta()
         v_boson_phi = v_boson.phi()
+        v_boson_mass = v_boson.mass()
+        
+        
+        
+        
         
         # print (v_boson_pt)
         # fill the vector boson pt
@@ -266,18 +370,132 @@ for filename in filenames:
         v_boson_pt_hist_to1TeV.Fill(v_boson_pt, weight * weight_xs / 1000.0)
         v_boson_eta_hist.Fill(v_boson_eta, weight * weight_xs / 1000.0)
         v_boson_phi_hist.Fill(v_boson_phi, weight * weight_xs / 1000.0)
+        if boson == "W":
+            DeltaPhi_lnu=abs(ROOT.TVector2.Phi_mpi_pi(decay_prods[0].phi()-decay_prods[1].phi()))
+            w_boson_mt = pow(2*decay_prods[0].pt()*decay_prods[1].pt()*(1-cos(DeltaPhi_lnu)), 0.5)
+            w_boson_transverse_mass_hist.Fill(w_boson_mt, weight * weight_xs / 1000.0)
+            w_boson_transverse_mass_pt_hist2D.Fill(w_boson_mt, v_boson_pt, weight * weight_xs / 1000.0)
+            w_boson_transverse_mass_phizwlundnu_hist2D.Fill(w_boson_mt, DeltaPhi_lnu, weight * weight_xs / 1000.0)
+            
+        
+        anzahl = 0
+        sum_pt = 0
+        for jet in jets:
+            if abs(jet.eta())<= 2.4:
+                if jet.pt() >= 30:
+                    anzahl += 1
+                    sum_pt += jet.pt()
+        jets_anzahl_hist.Fill(anzahl, weight * weight_xs / 1000.0)
+        jets_HT_hist.Fill(sum_pt, weight * weight_xs / 1000.0)
+        jets_anzahl_HT_hist2D.Fill(anzahl, sum_pt, weight * weight_xs / 1000.0)
+        
+        
+        if njets > 0:
+            jets_fuehrende_Ordnung_pt = jets[0].pt()
+            jets_fuehrende_Ordnung_eta = jets[0].eta()
+            jets_fuehrende_Ordnung_phi = jets[0].phi()
+            DeltaPhi = v_boson_phi - jets_fuehrende_Ordnung_phi
+            DeltaPhi_richtigerBereich = ROOT.TVector2.Phi_mpi_pi(DeltaPhi)
+            DeltaPhi_betrag= abs(DeltaPhi_richtigerBereich)
+            jets_fuehrende_Ordnung_pt_hist.Fill(jets_fuehrende_Ordnung_pt, weight * weight_xs / 1000.0)
+            jets_fuehrende_Ordnung_eta_hist.Fill(jets_fuehrende_Ordnung_eta, weight * weight_xs / 1000.0)
+            v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist.Fill(DeltaPhi_betrag, weight * weight_xs / 1000.0)
+            v_boson_jets_fuehrende_Ordnung_pt_hist2D.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, weight * weight_xs / 1000.0)
+            v_boson_pt_DeltaPhi_hist2D.Fill(v_boson_pt, DeltaPhi_betrag, weight * weight_xs / 1000.0)
+            jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D.Fill(jets_fuehrende_Ordnung_pt, DeltaPhi_betrag, weight * weight_xs / 1000.0)
+            v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, DeltaPhi_betrag,weight * weight_xs / 1000.0) 
+            v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, anzahl, weight * weight_xs / 1000.0)
+            v_boson_pt_DeltaPhi_anzahl_hist3D.Fill(v_boson_pt, DeltaPhi_betrag, anzahl,  weight * weight_xs / 1000.0)
+            
+            if jets_fuehrende_Ordnung_pt >= 100:
+                if abs(jets_fuehrende_Ordnung_eta) <= 2.4:
+                    if v_boson_pt >= 250:
+                        if DeltaPhi_betrag >= 1.57:
+                            v_boson_pt_hist_ana.Fill(v_boson_pt, weight * weight_xs / 1000.0)
+                            v_boson_pt_hist_to1TeV_ana.Fill(v_boson_pt, weight * weight_xs / 1000.0)
+                            v_boson_eta_hist_ana.Fill(v_boson_eta, weight * weight_xs / 1000.0)
+                            v_boson_phi_hist_ana.Fill(v_boson_phi, weight * weight_xs / 1000.0)
+                            if boson == "W":
+                                DeltaPhi_lnu=abs(ROOT.TVector2.Phi_mpi_pi(decay_prods[0].phi()-decay_prods[1].phi()))
+                                w_boson_mt = pow(2*decay_prods[0].pt()*decay_prods[1].pt()*(1-cos(DeltaPhi_lnu)), 0.5)
+                                w_boson_transverse_mass_hist_ana.Fill(w_boson_mt, weight * weight_xs / 1000.0)
+                                w_boson_transverse_mass_pt_hist2D_ana.Fill(w_boson_mt, v_boson_pt, weight * weight_xs / 1000.0)
+                                w_boson_transverse_mass_phizwlundnu_hist2D_ana.Fill(w_boson_mt, DeltaPhi_lnu, weight * weight_xs / 1000.0)
+                                    
+                            anzahl_ana = 0
+                            sum_pt_ana = 0
+                            for jet in jets:
+                                if abs(jet.eta())<= 2.4:
+                                    if jet.pt() >= 30:
+                                        anzahl_ana += 1
+                                        sum_pt_ana += jet.pt()
+                            jets_anzahl_hist_ana.Fill(anzahl_ana, weight * weight_xs / 1000.0)
+                            jets_HT_hist_ana.Fill(sum_pt_ana, weight * weight_xs / 1000.0)
+                            jets_anzahl_HT_hist2D_ana.Fill(anzahl_ana, sum_pt_ana, weight * weight_xs / 1000.0)
+                                
+                                    
+                            jets_fuehrende_Ordnung_pt_hist_ana.Fill(jets_fuehrende_Ordnung_pt, weight * weight_xs / 1000.0)
+                            jets_fuehrende_Ordnung_eta_hist_ana.Fill(jets_fuehrende_Ordnung_eta, weight * weight_xs / 1000.0)
+                            v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist_ana.Fill(DeltaPhi_betrag, weight * weight_xs / 1000.0)
+                            v_boson_jets_fuehrende_Ordnung_pt_hist2D_ana.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, weight * weight_xs / 1000.0)
+                            v_boson_pt_DeltaPhi_hist2D_ana.Fill(v_boson_pt, DeltaPhi_betrag, weight * weight_xs / 1000.0)
+                            jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D_ana.Fill(jets_fuehrende_Ordnung_pt, DeltaPhi_betrag, weight * weight_xs / 1000.0)
+                            v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D_ana.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, DeltaPhi_betrag,weight * weight_xs / 1000.0) 
+                            v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D_ana.Fill(v_boson_pt, jets_fuehrende_Ordnung_pt, anzahl_ana, weight * weight_xs / 1000.0)
+                            v_boson_pt_DeltaPhi_anzahl_hist3D_ana.Fill(v_boson_pt, DeltaPhi_betrag, anzahl_ana,  weight * weight_xs / 1000.0)
+                                
+        
+        
+        
+        
+        
+                               
+                        
+                
         
         
 
 # write all to a file
 file_.WriteTObject(v_boson_eta_hist)
 file_.WriteTObject(v_boson_phi_hist)
-#canvas=ROOT.TCanvas("canvas","canvas",1500,1000)
-#canvas.SetLogy(1)
 file_.WriteTObject(v_boson_pt_hist)
-#canvas.Clear()
-#canvas.SetLogy(1)
 file_.WriteTObject(v_boson_pt_hist_to1TeV)
+file_.WriteTObject(jets_fuehrende_Ordnung_pt_hist)
+file_.WriteTObject(jets_fuehrende_Ordnung_eta_hist)
+file_.WriteTObject(jets_anzahl_hist)
+file_.WriteTObject(jets_HT_hist)
+file_.WriteTObject(v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist)
+file_.WriteTObject(w_boson_transverse_mass_hist)
+file_.WriteTObject(v_boson_jets_fuehrende_Ordnung_pt_hist2D)
+file_.WriteTObject(v_boson_pt_DeltaPhi_hist2D)
+file_.WriteTObject(jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D)
+file_.WriteTObject(jets_anzahl_HT_hist2D)
+file_.WriteTObject(w_boson_transverse_mass_pt_hist2D)
+file_.WriteTObject(w_boson_transverse_mass_phizwlundnu_hist2D)
+file_.WriteTObject(v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D)
+file_.WriteTObject(v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D)
+file_.WriteTObject(v_boson_pt_DeltaPhi_anzahl_hist3D)
+
+file_.WriteTObject(v_boson_eta_hist_ana)
+file_.WriteTObject(v_boson_phi_hist_ana)
+file_.WriteTObject(v_boson_pt_hist_ana)
+file_.WriteTObject(v_boson_pt_hist_to1TeV_ana)
+file_.WriteTObject(jets_fuehrende_Ordnung_pt_hist_ana)
+file_.WriteTObject(jets_fuehrende_Ordnung_eta_hist_ana)
+file_.WriteTObject(jets_anzahl_hist_ana)
+file_.WriteTObject(jets_HT_hist_ana)
+file_.WriteTObject(v_boson_jets_fuehrende_Ordnung_DeltaPhi_hist_ana)
+file_.WriteTObject(w_boson_transverse_mass_hist_ana)
+file_.WriteTObject(v_boson_jets_fuehrende_Ordnung_pt_hist2D_ana)
+file_.WriteTObject(v_boson_pt_DeltaPhi_hist2D_ana)
+file_.WriteTObject(jets_fuehrende_Ordnung_pt_DeltaPhi_hist2D_ana)
+file_.WriteTObject(jets_anzahl_HT_hist2D_ana)
+file_.WriteTObject(w_boson_transverse_mass_pt_hist2D_ana)
+file_.WriteTObject(w_boson_transverse_mass_phizwlundnu_hist2D_ana)
+file_.WriteTObject(v_boson_pt_jets_fuehrende_Ordnung_pt_DeltaPhi_hist3D_ana)
+file_.WriteTObject(v_boson_pt_jets_fuehrende_Ordnung_pt_anzahl_hist3D_ana)
+file_.WriteTObject(v_boson_pt_DeltaPhi_anzahl_hist3D_ana)
+
 
 
 file_.Close()
