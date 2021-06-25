@@ -1,6 +1,6 @@
 # imports
 from __future__ import print_function
-import ROOT
+from ROOT import TH1D,TH2D,TFile,Math
 import sys
 from array import array
 from DataFormats.FWLite import Events, Handle
@@ -8,15 +8,6 @@ from math import pow,sqrt,cos
 from sample_info import sample_dict
 from Definitions import var_info_dict
 from VariableCalculator import VariableCalculator
-
-def GetCorrFactor(hist,input_tuple):
-    if len(input_tuple)==1:
-        corr_factor=hist.GetBinContent(hist.FindBin(input_tuple[0]))
-    elif len(input_tuple)==2:
-        corr_factor=hist.GetBinContent(hist.FindBin(input_tuple[0],input_tuple[1]))
-    else:
-        corr_factor=None
-    return corr_factor
 
 # inputs
 era = str(sys.argv[1])
@@ -36,28 +27,38 @@ labelWeight = "generator"
 labelLHE = "externalLHEProducer"
 labelJets = "slimmedGenJets"
 
+# binning according to https://arxiv.org/pdf/1705.04664.pdf
+binning = [
+           30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 200, 250, 300, 350, 400, 450,
+           500, 550, 600, 650, 700, 750, 800, 850, 900, 950, 1000, 1100, 1200, 1300, 1400, 1600, 1800,
+           2000, 2200, 2400, 2600, 2800, 3000, 6500
+          ]
 
+# file to store the histograms
+file_ = TFile(boson + "_boson_pt_" + era + "_" + postfix + ".root", "RECREATE")
 
-
-
-
-file_ = ROOT.TFile(boson + "_boson_pt_" + era + "_" + postfix + ".root", "RECREATE")
-
-corrfactor_file=ROOT.TFile.Open(boson + "_factors.root")
+# dummy histograms for testing purposes, will be removed later
+dummy_1D_hist=TH1D("bla","bla",1,0,1000)
+dummy_1D_hist.SetBinContent(1,2.)
+dummy_2D_hist=TH2D("blabla","blabla",1,0,1000,1,-5,5)
+dummy_2D_hist.SetBinContent(1,1,3.)
+dummy_2D_hist.SetBinContent(0,1,3.)
+dummy_2D_hist.SetBinContent(1,0,3.)
+dummy_2D_hist.SetBinContent(0,0,3.)
+dummy_2D_hist.SetBinContent(1,2,3.)
+dummy_2D_hist.SetBinContent(0,2,3.)
+dummy_2D_hist.SetBinContent(2,0,3.)
+dummy_2D_hist.SetBinContent(2,1,3.)
+dummy_2D_hist.SetBinContent(2,2,3.)
 
 # dictionary containing information regarding corrections factors
-#corr_factor_dict = { 
-#                            "" : {},
-#                            "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_to1TeV_factors"), "function" : "boson_pt"},
-#                            "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_theory_binning_factors"), "function" : "boson_pt"},
-#                            "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_to1TeV_ana_factors"), "function" : "boson_pt"},
-#                            "Vpt_theory_binning_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_theory_binning_ana_factors"), "function" : "boson_pt"},
-#                            "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_eta_2D_factors"), "function1" : "boson_pt" , "function2" : "boson_eta"},
-#                            "Vpt_DeltaPhi_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_DeltaPhi_2D_factors") , "function1" : "boson_pt" , "function2" : #"deltaphi_boson_jet0"},
-#                            "Vpt_HT_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_HT_2D_factors") , "function1" : "boson_pt" , "function2" : "ht_jets"},
-#                            "Vpt_anzahl_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_anzahl_2D_factors") , "function1" : "boson_pt" , "function2" : "njets"}
-#                            
-#                        }'
+corr_factor_dict = {
+                       "" : {},
+                       ### 1D ###
+                       "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : dummy_1D_hist, "function" : "boson_pt"},
+                       ### 2D ###
+                       "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : dummy_2D_hist, "function1" : "boson_pt" , "function2" : "boson_eta"}
+                   }
 
 # dictionary containing reference between selection label and variablecalculator function checking selection
 sel_func_dict = {"incl" : "incl_sel" , "ana" : "ana_sel"}
@@ -66,15 +67,13 @@ sel_func_dict = {"incl" : "incl_sel" , "ana" : "ana_sel"}
 histo_dict = {}
 
 # create histograms for all combinations of desired histograms and correction factors
-#for key in var_info_dict:
-#    for key_ in corr_factor_dict:
-#        for key__ in sel_func_dict:
-#            histo_dict[key__+"_"+key+"_"+key_]=var_info_dict[key]["hist"].Clone()
-#            histo_dict[key__+"_"+key+"_"+key_].SetName(boson+"_"+key__+"_"+key+"_"+key_)
-#            histo_dict[key__+"_"+key+"_"+key_].SetTitle(boson+"_"+key__+"_"+key+"_"+key_)
-#            histo_dict[key__+"_"+key+"_"+key_].Sumw2()
-
-
+for key in var_info_dict:
+    for key_ in corr_factor_dict:
+        for key__ in sel_func_dict:
+            histo_dict[key__+"_"+key+"_"+key_]=var_info_dict[key]["hist"].Clone()
+            histo_dict[key__+"_"+key+"_"+key_].SetName(boson+"_"+key__+"_"+key+"_"+key_)
+            histo_dict[key__+"_"+key+"_"+key_].SetTitle(boson+"_"+key__+"_"+key+"_"+key_)
+            histo_dict[key__+"_"+key+"_"+key_].Sumw2()
 
 count = 0
 
@@ -105,6 +104,7 @@ for filename in filenames:
             weight_xs = subsubdict.get("sigma", None) / (subsubdict.get("X", None) * subsubdict.get("N_gen", None))
     weight_xs *= 1000.0
     print ("weight_xs = ", weight_xs)
+
     # loop over events
     events = Events(filename)
     for event in events:
@@ -120,8 +120,6 @@ for filename in filenames:
         weight = eventinfo.product().weight()
         lhe_weight = lheinfo.product().originalXWGTUP()
         jets = handleJets.product()
-        njets = jets.size()
-        #print(jets[0].pt())
         # list for decay products of W or Z boson
         decay_prods = []
         # list for photons either for photon+jets events or for radiated photons to add back to charged leptons
@@ -204,7 +202,7 @@ for filename in filenames:
             for decay_prod in decay_prods:
                 if abs(decay_prod.pdgId()) == 11 or abs(decay_prod.pdgId()) == 13 or abs(decay_prod.pdgId()) == 15:
                     for photon in photons:
-                        if sqrt(ROOT.Math.VectorUtil.DeltaR2(decay_prod.p4(), photon.p4())) < 0.1:
+                        if sqrt(Math.VectorUtil.DeltaR2(decay_prod.p4(), photon.p4())) < 0.1:
                             decay_prod.setP4(decay_prod.p4() + photon.p4())
 
         elif boson == "W":
@@ -215,7 +213,7 @@ for filename in filenames:
             for decay_prod in decay_prods:
                 if abs(decay_prod.pdgId()) == 11 or abs(decay_prod.pdgId()) == 13 or abs(decay_prod.pdgId()) == 15:
                     for photon in photons:
-                        if sqrt(ROOT.Math.VectorUtil.DeltaR2(decay_prod.p4(), photon.p4())) < 0.1:
+                        if sqrt(Math.VectorUtil.DeltaR2(decay_prod.p4(), photon.p4())) < 0.1:
                             decay_prod.setP4(decay_prod.p4() + photon.p4())
         # photons are more complicated on theory level
         # one has to find isolated photons using the isolation prescription in https://arxiv.org/pdf/1705.04664.pdf
@@ -230,7 +228,7 @@ for filename in filenames:
                 for R in [R_0_dyn / iterations * i for i in range(1, int(iterations) + 1)]:
                     isolation = 0.0
                     for hadron in hadrons:
-                        if sqrt(ROOT.Math.VectorUtil.DeltaR2(hadron.p4(), photon.p4())) <= R:
+                        if sqrt(Math.VectorUtil.DeltaR2(hadron.p4(), photon.p4())) <= R:
                             isolation += hadron.pt()
                     if isolation > (epsilon_0_dyn * photon.pt() * pow((1 - cos(R)) / (1 - cos(R_0_dyn)), n_dyn)):
                         isolated = False
@@ -252,44 +250,43 @@ for filename in filenames:
         else:
             print ("only W or Z boson or Photon allowed")
             exit()
-        
+
         # variablecalculator class instance to calculate necessary variables in an automated way
         vc = VariableCalculator(v_boson,jets,decay_prods)
         
         # loop over selections
-#        for key__ in sel_func_dict:
-#            if not getattr(vc,sel_func_dict[key__])():
-#                continue
+        for key__ in sel_func_dict:
+            if not getattr(vc,sel_func_dict[key__])():
+                continue
             # loop over keys describing desired correction factors
-#            for key_ in corr_factor_dict:
+            for key_ in corr_factor_dict:
                 # regular weight
-#                final_weight = weight * weight_xs / 1000.0
+                final_weight = weight * weight_xs / 1000.0
                 # apply correction factors depending on its dimension
                 # empty string -> no correction factor
-#               if key_=="":
-#                    final_weight*=1
-#                elif corr_factor_dict[key_]["dim"]==1:
-#                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function"])()))
-#                elif corr_factor_dict[key_]["dim"]==2:
-#                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function1"])      (),getattr(vc,corr_factor_dict[key_]["function2"])()))
-#                else:
-#                    print("correction factor calculation problem")
-#                    exit()
+                if key_=="":
+                    final_weight*=1
+                elif corr_factor_dict[key_]["dim"]==1:
+                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function"])()))
+                elif corr_factor_dict[key_]["dim"]==2:
+                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function1"])(),getattr(vc,corr_factor_dict[key_]["function2"])()))
+                else:
+                    print("correction factor calculation problem")
+                    exit()
                 # loop over keys describing desired variables
-#                for key in var_info_dict:
+                for key in var_info_dict:
                     # fill histograms depending on dimension of histograms
-#                    if var_info_dict[key]["dim"]==1:
-#                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function"])(), final_weight)
-#                    elif var_info_dict[key]["dim"]==2:
-#                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function1"])(), getattr(vc,var_info_dict[key]["function2"])(), final_weight)
-#                    else:
-#                        print("only 1 and 2 dimensions supported at the moment")
-#                        exit()'
+                    if var_info_dict[key]["dim"]==1:
+                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function"])(), final_weight)
+                    elif var_info_dict[key]["dim"]==2:
+                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function1"])(), getattr(vc,var_info_dict[key]["function2"])(), final_weight)
+                    else:
+                        print("only 1 and 2 dimensions supported at the moment")
+                        exit()
 
 # write all histograms to a file
 for key in histo_dict:
     file_.WriteTObject(histo_dict[key])
-
 
 file_.Close()
 print ("finished")
