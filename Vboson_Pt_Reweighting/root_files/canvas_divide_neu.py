@@ -45,11 +45,11 @@ for key in var_info_dict:
                 histo_dict[key__+"_"+key+"_"+key_].GetYaxis().SetTitle(var_info_dict[key]["Yaxis"])
                 histo_dict[key__+"_"+key+"_"+key_].GetYaxis().CenterTitle()
             if var_info_dict[key]["dim"] == 1:
-                if key__ == incl:
+                if key__ == "incl":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(1)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(2)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(1)
-                if key__ == ana:
+                if key__ == "ana":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(4)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(6)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(2)
@@ -71,8 +71,59 @@ for key in var_info_dict:
             histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson + "_"+ key_)
             file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
                 
-                
-                
+            
+            
+for key in var_info_dict:
+    for key_ in corr_factor_dict:
+        if var_info_dict[key]["dim"] == 1:
+            canvas.Divide(1,2)
+            for key__ in sel_func_dict:
+                legend.AddEntry(histo_dict["LO"][key__+"_"+key+"_"+key_], "LO_"+ key__ , "l")
+                legend.AddEntry(histo_dict["NLO"][key__+"_"+key+"_"+key_], "NLO_"+ key__, "l")
+                if key__ == "incl":
+                    legend.AddEntry(histo_dict["ratio"][key__+"_"+key+"_"+key_], "inklusiver Phasenraum", "l")
+                if key__ == "ana":
+                    legend.AddEntry(histo_dict["ratio"][key__+"_"+key+"_"+key_], "Analysephasenraum", "l")
+                if key == "boson_pt" or key =="boson_pt_to1TeV" or key=="jets_fuehrende_Ordnung_pt" or key=="jets_HT" or key=="boson_transverse_mass" or key=="geladenes_lepton_pt" or key=="boson_invariant_mass" or key=="jets_NLO_pt" or key=="jets_NNLO_pt" or key=="jets_NNNLO_pt" or key=="jets_anzahl":
+                    canvas.cd(1).SetLogy(1)
+                canvas.cd(1)
+                if key__ == "incl":
+                    histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("histe")
+                    histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("histesame")
+                if key__ == "ana":
+                    histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("histesame")
+                    histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("histesame")
+                legend.Draw("same")
+                canvas.cd(2)
+                if key__ == "incl":
+                    histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
+                if key__ == "ana":
+                    histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histesame")
+                legend2.Draw("same")
+            canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
+            canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
+            canvas.Clear()
+            legend.Clear()
+            legend2.Clear()
+        if var_info_dict[key]["dim"] == 2:  
+            for key__ in sel_func_dict:
+                canvas.Divide(1,3)
+                canvas.cd(1)
+                canvas.cd(1).SetLogz(1)
+                ROOT.gPad.SetRightMargin(0.2)
+                histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
+                canvas.cd(2)
+                canvas.cd(2).SetLogz(1)
+                ROOT.gPad.SetRightMargin(0.2)
+                histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("colz")
+                canvas.cd(3)
+                ROOT.gPad.SetRightMargin(0.2)
+                histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("colz")
+                canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
+                canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
+                canvas.Clear()
+                legend.Clear()
+                legend2.Clear()
                 
 file_factors.Close()
 file_LO.Close()
