@@ -46,18 +46,18 @@ file_ = ROOT.TFile(boson + "_boson_pt_" + era + "_" + postfix + ".root", "RECREA
 corrfactor_file=ROOT.TFile.Open(boson + "_factors.root")
 
 # dictionary containing information regarding corrections factors
-#corr_factor_dict = { 
-#                            "" : {},
-#                            "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_to1TeV_factors"), "function" : "boson_pt"},
-#                            "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_theory_binning_factors"), "function" : "boson_pt"},
-#                            "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_to1TeV_ana_factors"), "function" : "boson_pt"},
-#                            "Vpt_theory_binning_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_boson_pt_theory_binning_ana_factors"), "function" : "boson_pt"},
-#                            "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_eta_2D_factors"), "function1" : "boson_pt" , "function2" : "boson_eta"},
-#                            "Vpt_DeltaPhi_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_DeltaPhi_2D_factors") , "function1" : "boson_pt" , "function2" : #"deltaphi_boson_jet0"},
-#                            "Vpt_HT_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_HT_2D_factors") , "function1" : "boson_pt" , "function2" : "ht_jets"},
-#                            "Vpt_anzahl_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_boson_pt_anzahl_2D_factors") , "function1" : "boson_pt" , "function2" : "njets"}
-#                            
-#                        }'
+corr_factor_dict = { 
+                            "" : {},
+#                            "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_corr_factor_incl"), "function" : "boson_pt"},
+#                           "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_theory_binning_corr_factor_incl"), "function" : "boson_pt"},
+#                            "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_corr_factor_ana"), "function" : "boson_pt"},
+#                            "Vpt_theory_binning_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_theory_binning_corr_factor_ana"), "function" : "boson_pt"},
+#                            "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_Veta_corr_factor_incl"), "function1" : "boson_pt" , "function2" : "boson_eta"},
+#                            "Vpt_DeltaPhi_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_DeltaPhi_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "deltaphi_boson_jet0"},
+#                            "Vpt_HT_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_HT_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "ht_jets"},
+#                            "Vpt_anzahl_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_anzahl_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "njets"}
+                            
+                        }
 
 # dictionary containing reference between selection label and variablecalculator function checking selection
 sel_func_dict = {"incl" : "incl_sel" , "ana" : "ana_sel"}
@@ -66,13 +66,13 @@ sel_func_dict = {"incl" : "incl_sel" , "ana" : "ana_sel"}
 histo_dict = {}
 
 # create histograms for all combinations of desired histograms and correction factors
-#for key in var_info_dict:
-#    for key_ in corr_factor_dict:
-#        for key__ in sel_func_dict:
-#            histo_dict[key__+"_"+key+"_"+key_]=var_info_dict[key]["hist"].Clone()
-#            histo_dict[key__+"_"+key+"_"+key_].SetName(boson+"_"+key__+"_"+key+"_"+key_)
-#            histo_dict[key__+"_"+key+"_"+key_].SetTitle(boson+"_"+key__+"_"+key+"_"+key_)
-#            histo_dict[key__+"_"+key+"_"+key_].Sumw2()
+for key in var_info_dict:
+    for key_ in corr_factor_dict:
+        for key__ in sel_func_dict:
+            histo_dict[key__+"_"+key+"_"+key_]=var_info_dict[key]["hist"].Clone()
+            histo_dict[key__+"_"+key+"_"+key_].SetName(boson+"_"+key__+"_"+key+"_"+key_)
+            histo_dict[key__+"_"+key+"_"+key_].SetTitle(boson+"_"+key__+"_"+key+"_"+key_)
+            histo_dict[key__+"_"+key+"_"+key_].Sumw2()
 
 
 
@@ -257,34 +257,34 @@ for filename in filenames:
         vc = VariableCalculator(v_boson,jets,decay_prods)
         
         # loop over selections
-#        for key__ in sel_func_dict:
-#            if not getattr(vc,sel_func_dict[key__])():
-#                continue
+        for key__ in sel_func_dict:
+            if not getattr(vc,sel_func_dict[key__])():
+                continue
             # loop over keys describing desired correction factors
-#            for key_ in corr_factor_dict:
+            for key_ in corr_factor_dict:
                 # regular weight
-#                final_weight = weight * weight_xs / 1000.0
+                final_weight = weight * weight_xs / 1000.0
                 # apply correction factors depending on its dimension
                 # empty string -> no correction factor
-#               if key_=="":
-#                    final_weight*=1
-#                elif corr_factor_dict[key_]["dim"]==1:
-#                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function"])()))
-#                elif corr_factor_dict[key_]["dim"]==2:
-#                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function1"])      (),getattr(vc,corr_factor_dict[key_]["function2"])()))
-#                else:
-#                    print("correction factor calculation problem")
-#                    exit()
+                if key_=="":
+                    final_weight*=1
+                elif corr_factor_dict[key_]["dim"]==1:
+                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function"])()))
+                elif corr_factor_dict[key_]["dim"]==2:
+                    final_weight*=corr_factor_dict[key_]["hist"].GetBinContent(corr_factor_dict[key_]["hist"].FindBin(getattr(vc,corr_factor_dict[key_]["function1"])(),getattr(vc,corr_factor_dict[key_]["function2"])()))
+                else:
+                    print("correction factor calculation problem")
+                    exit()
                 # loop over keys describing desired variables
-#                for key in var_info_dict:
+                for key in var_info_dict:
                     # fill histograms depending on dimension of histograms
-#                    if var_info_dict[key]["dim"]==1:
-#                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function"])(), final_weight)
-#                    elif var_info_dict[key]["dim"]==2:
-#                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function1"])(), getattr(vc,var_info_dict[key]["function2"])(), final_weight)
-#                    else:
-#                        print("only 1 and 2 dimensions supported at the moment")
-#                        exit()'
+                    if var_info_dict[key]["dim"]==1:
+                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function"])(), final_weight)
+                    elif var_info_dict[key]["dim"]==2:
+                        histo_dict[key__+"_"+key+"_"+key_].Fill(getattr(vc,var_info_dict[key]["function1"])(), getattr(vc,var_info_dict[key]["function2"])(), final_weight)
+                    else:
+                        print("only 1 and 2 dimensions supported at the moment")
+                        exit()
 
 # write all histograms to a file
 for key in histo_dict:
