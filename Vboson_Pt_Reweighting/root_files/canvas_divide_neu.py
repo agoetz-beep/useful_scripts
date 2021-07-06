@@ -53,7 +53,9 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(4)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(6)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(2)
-                histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_])
+                histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_])
+                if key =="boson_pt":
+                    histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_]+ " mit Theorie-Binning")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle("")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().CenterTitle()
@@ -68,7 +70,7 @@ for key in var_info_dict:
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_]+" -LO")
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetTitle(" -NLO")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle(" -Verhaeltnis NLO zu LO")
-            histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson + "_"+ key_)
+            #histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
             #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
                 
             
@@ -100,8 +102,8 @@ for key in var_info_dict:
                 if key__ == "ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend2.Draw("same")
-            canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
-            canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
+            canvas.Print(boson + "_"+key+"_"+key_+ ".png")
+            canvas.Print(boson +"_"+key+"_"+key_+ ".pdf")
             canvas.Clear()
             legend.Clear()
             legend2.Clear()
@@ -125,27 +127,11 @@ for key in var_info_dict:
                 legend.Clear()
                 legend2.Clear()
                 
-file_factors.Close()
+#file_factors.Close()
 file_LO.Close()
 file_NLO.Close()
 
 print("finished")                
                 
-                
-                
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             
             

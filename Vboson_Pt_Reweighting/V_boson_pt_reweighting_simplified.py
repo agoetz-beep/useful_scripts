@@ -47,15 +47,15 @@ corrfactor_file=ROOT.TFile.Open(boson + "_factors.root")
 
 # dictionary containing information regarding corrections factors
 corr_factor_dict = { 
-                            "" : {},
-#                            "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_corr_factor_incl"), "function" : "boson_pt"},
-#                           "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_theory_binning_corr_factor_incl"), "function" : "boson_pt"},
-#                            "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_corr_factor_ana"), "function" : "boson_pt"},
-#                            "Vpt_theory_binning_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_Vpt_theory_binning_corr_factor_ana"), "function" : "boson_pt"},
-#                            "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_Veta_corr_factor_incl"), "function1" : "boson_pt" , "function2" : "boson_eta"},
-#                            "Vpt_DeltaPhi_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_DeltaPhi_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "deltaphi_boson_jet0"},
-#                            "Vpt_HT_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_HT_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "ht_jets"},
-#                            "Vpt_anzahl_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson + "_Vpt_anzahl_corr_factor_incl") , "function1" : "boson_pt" , "function2" : "njets"}
+#                            "" : {},
+                            "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson +"_incl_boson_pt_to1TeV_corr_factor"), "function" : "boson_pt"},
+                            "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_incl_boson_pt_corr_factor"), "function" : "boson_pt"},
+                            "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson +"_ana_boson_pt_to1TeV_corr_factor"), "function" : "boson_pt"},
+                            "Vpt_theory_binning_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_ana_boson_pt_corr_factor"), "function" : "boson_pt"},
+                            "Vpt_Veta_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson+"_incl_boson_pt_eta_corr_factor"), "function1" : "boson_pt" , "function2" : "boson_eta"},
+                            "Vpt_DeltaPhi_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson+"_incl_boson_pt_DeltaPhi_corr_factor") , "function1" : "boson_pt" , "function2" : "deltaphi_boson_jet0"},
+                            "Vpt_HT_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson+"_incl_boson_pt_HT_corr_factor") , "function1" : "boson_pt" , "function2" : "ht_jets"},
+                            "Vpt_anzahl_corr_factor_incl" : {"dim" : 2, "hist" : corrfactor_file.Get(boson+"_incl_boson_pt_anzahl_corr_factor") , "function1" : "boson_pt" , "function2" : "njets"}
                             
                         }
 
