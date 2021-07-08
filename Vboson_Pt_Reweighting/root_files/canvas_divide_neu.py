@@ -15,7 +15,7 @@ legend=ROOT.TLegend(0.15,0.15)
 legend2=ROOT.TLegend(0.15,0.15)
 
 corr_factor_dict = { 
-#                            "" : "",
+                            "" : "",
                             "Vpt_corr_factor_incl" :" mit Korrekturfaktor (Vpt, inklusiver Phasenraum)",
                             "Vpt_theory_binning_corr_factor_incl" : " mit Korrekturfaktor (Vpt, inklusiver Phasenraum, Theorie-Binning)",
                             "Vpt_corr_factor_ana" : " mit Korrekturfaktor (Vpt, Analysephasenraum)",
@@ -35,15 +35,19 @@ for key in var_info_dict:
     for key_ in corr_factor_dict:
         for key__ in sel_func_dict:
             histo_dict["LO"][key__+"_"+key+"_"+key_]=file_LO.Get(boson+"_"+key__+"_"+key+"_"+key_)
-            histo_dict["NLO"][key__+"_"+key+"_"+key_]=file_NLO.Get(boson+"_"+key__+"_"+key+"_"+key_)
+            histo_dict["NLO"][key__+"_"+key+"_"+key_]=file_NLO.Get(boson+"_"+key__+"_"+key+"_"+"")
             histo_dict["ratio"][key__+"_"+key+"_"+key_]=histo_dict["NLO"][key__+"_"+key+"_"+key_].Clone()
             histo_dict["ratio"][key__+"_"+key+"_"+key_].Divide(histo_dict["LO"][key__+"_"+key+"_"+key_])
             for key___ in histo_dict:
                 histo_dict[key___][key__+"_"+key+"_"+key_].SetName(boson+"_"+key__+"_"+key+"_"+key_)
                 histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetTitle(var_info_dict[key]["Xaxis"])
                 histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().CenterTitle()
+                histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetTitleSize(0.049)
+                histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetLabelSize(0.05)
                 histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetTitle(var_info_dict[key]["Yaxis"])
                 histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().CenterTitle()
+                histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetTitleSize(0.049)
+                histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetLabelSize(0.05)
             if var_info_dict[key]["dim"] == 1:
                 if key__ == "incl":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(1)
@@ -54,37 +58,46 @@ for key in var_info_dict:
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(6)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_])
+                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
+                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetLabel("CMS simulation" + \ 
+                #    +"work in progress")
                 if key =="boson_pt":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_]+ " mit Theorie-Binning")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle("")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
-                histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().CenterTitle()
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
             if var_info_dict[key]["dim"] == 2:
                 for key___ in histo_dict:
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitle(var_info_dict[key]["Zaxis"])
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitleSize(0.049)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetLabelSize(0.05)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,2)
-                histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_]+" -LO")
+                histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle("#splitline{{{0}}}{{{1}}}".format(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_]," -LO"))
+                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetTitle(" -NLO")
+                #histo_dict["NLO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle(" -Verhaeltnis NLO zu LO")
+                #histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
             #histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
             #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
                 
-            
+
             
 for key in var_info_dict:
     for key_ in corr_factor_dict:
         if var_info_dict[key]["dim"] == 1:
             canvas.Divide(1,2)
             for key__ in sel_func_dict:
-                legend.AddEntry(histo_dict["LO"][key__+"_"+key+"_"+key_], "LO_"+ key__ , "l")
-                legend.AddEntry(histo_dict["NLO"][key__+"_"+key+"_"+key_], "NLO_"+ key__, "l")
                 if key__ == "incl":
+                    legend.AddEntry(histo_dict["LO"][key__+"_"+key+"_"+key_], "LO +<=4 Jets, inklusiver Phasenraum", "l")
+                    legend.AddEntry(histo_dict["NLO"][key__+"_"+key+"_"+key_], "NLO +<=2 Jets, inklusiver Phasenraum", "l")
                     legend2.AddEntry(histo_dict["ratio"][key__+"_"+key+"_"+key_], "inklusiver Phasenraum", "l")
                 if key__ == "ana":
+                    legend.AddEntry(histo_dict["LO"][key__+"_"+key+"_"+key_], "LO +<=4 Jets, Analysephasenraum", "l")
+                    legend.AddEntry(histo_dict["NLO"][key__+"_"+key+"_"+key_], "NLO +<=2 Jets, Analysephasenraum", "l")
                     legend2.AddEntry(histo_dict["ratio"][key__+"_"+key+"_"+key_], "Analysephasenraum", "l")
                 if key == "boson_pt" or key =="boson_pt_to1TeV" or key=="jets_fuehrende_Ordnung_pt" or key=="jets_HT" or key=="boson_transverse_mass" or key=="geladenes_lepton_pt" or key=="boson_invariant_mass" or key=="jets_NLO_pt" or key=="jets_NNLO_pt" or key=="jets_NNNLO_pt" or key=="jets_anzahl":
                     canvas.cd(1).SetLogy(1)
@@ -112,6 +125,7 @@ for key in var_info_dict:
                 canvas.Divide(1,3)
                 canvas.cd(1)
                 canvas.cd(1).SetLogz(1)
+                #canvas.cd(1).SetTitle("-LO")
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
                 canvas.cd(2)
