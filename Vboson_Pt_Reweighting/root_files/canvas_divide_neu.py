@@ -53,34 +53,102 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(1)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(2)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(1)
-                if key__ == "ana":
+                    maximum_NLO=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMaximum()
+                    maximum_LO=histo_dict["LO"][key__+"_"+key+"_"+key_].GetMaximum()
+                    maximum_NLO=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMaximum()
+                    maximum_ratio=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMaximum()
+                    minimum_LO=histo_dict["LO"][key__+"_"+key+"_"+key_].GetMinimum()
+                    minimum_NLO=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMinimum()
+                    minimum_ratio=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMinimum()
+                    if maximum_LO > maximum_NLO:
+                        maximum_LONLO = maximum_LO
+                    else:
+                        maximum_LONLO = maximum_NLO
+                    if minimum_LO < minimum_NLO:
+                        minimum_LONLO = minimum_LO
+                    else:
+                        minimum_LONLO = minimum_NLO
+                else:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(4)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(6)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(2)
+                    maximum_LO_ana=histo_dict["LO"][key__+"_"+key+"_"+key_].GetMaximum()
+                    maximum_NLO_ana=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMaximum()
+                    maximum_ratio_ana=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMaximum()
+                    minimum_LO_ana=histo_dict["LO"][key__+"_"+key+"_"+key_].GetMinimum()
+                    minimum_NLO_ana=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMinimum()
+                    minimum_ratio_ana=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMinimum()
+                    if maximum_LO_ana > maximum_NLO_ana:
+                        maximum_LONLO_ana = maximum_LO_ana
+                    else:
+                        maximum_LONLO_ana = maximum_NLO_ana
+                    if minimum_LO_ana < minimum_NLO_ana:
+                        minimum_LONLO_ana = minimum_LO_ana
+                    else:
+                        minimum_LONLO_ana = minimum_NLO_ana
+                    if maximum_LONLO > maximum_LONLO_ana:
+                        maximum_LONLO_final = maximum_LONLO*1.2
+                    else:
+                        maximum_LONLO_final = maximum_LONLO_ana*1.2
+                    if minimum_LONLO < minimum_LONLO_ana:
+                        minimum_LONLO_final = minimum_LONLO*0.8
+                    else:
+                        minimum_LONLO_final = minimum_LONLO_ana*0.8
+                    if maximum_ratio > maximum_ratio_ana:
+                        maximum_ratio_final = maximum_ratio*1.2
+                    else:
+                        maximum_ratio_final = maximum_ratio_ana*1.2
+                    if minimum_ratio < minimum_ratio_ana:
+                        minimum_ratio_final = minimum_ratio*0.8
+                    else:
+                        minimum_ratio_final = minimum_ratio_ana*0.8
+                    #histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
+                    #histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
+                    if minimum_LONLO_final<0:
+                        histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_LONLO_final)
+                    else:
+                        histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
+                    if minimum_ratio_final<0:
+                        histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_ratio_final)
+                    else:
+                        histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_ratio_final,maximum_ratio_final)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_])
-                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
                 #histo_dict["LO"][key__+"_"+key+"_"+key_].SetLabel("CMS simulation" + \ 
                 #    +"work in progress")
                 if key =="boson_pt":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_]+ " mit Theorie-Binning")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle("")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
-                histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
+                #histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
             if var_info_dict[key]["dim"] == 2:
                 for key___ in histo_dict:
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitle(var_info_dict[key]["Zaxis"])
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitleSize(0.049)
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetLabelSize(0.05)
+                    if key__ == "incl":
+                        maximum_incl=histo_dict[key___][key__+"_"+key+"_"+key_].GetMaximum()
+                        minimum_incl=histo_dict[key___][key__+"_"+key+"_"+key_].GetMinimum()
+                    if key__ == "ana":
+                        maximum_ana=histo_dict[key___][key__+"_"+key+"_"+key_].GetMaximum()
+                        minimum_ana=histo_dict[key___][key__+"_"+key+"_"+key_].GetMinimum()
+                        if maximum_incl > maximum_ana:
+                            maximum_final = maximum_incl*1.2
+                        else:
+                            maximum_final = maximum_ana*1.2
+                        if minimum_incl < minimum_ana:
+                            minimum_final = minimum_incl*0.8
+                        else:
+                            minimum_final = minimum_ana*0.8
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(minimum_final,maximum_final)
+                        if minimum_final<0:
+                            histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,maximum_final)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
-                histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,2)
+                #histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle("#splitline{{{0}}}{{{1}}}".format(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_]," -LO"))
-                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetTitle(" -NLO")
-                #histo_dict["NLO"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle(" -Verhaeltnis NLO zu LO")
-                #histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitleSize(0.08)
             #histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
             #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
                 
