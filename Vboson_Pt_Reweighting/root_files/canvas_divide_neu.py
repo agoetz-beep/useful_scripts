@@ -55,6 +55,8 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetLineColor(1)
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].SetLineColor(2)
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(1)
+                    if key_ == "":
+                        histo_dict["ratio"][key__+"_"+key+"_"+key_].SetLineColor(1)
                     maximum_NLO=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMaximum()
                     maximum_LO=histo_dict["LO"][key__+"_"+key+"_"+key_].GetMaximum()
                     maximum_NLO=histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMaximum()
@@ -115,19 +117,34 @@ for key in var_info_dict:
                     else:
                         histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_ratio_final,maximum_ratio_final)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_])
-                #histo_dict["LO"][key__+"_"+key+"_"+key_].SetLabel("CMS simulation" + \ 
-                #    +"work in progress")
                 if key =="boson_pt":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_]+ " mit Theorie-Binning")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle("")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
                 #histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
+                for key___ in histo_dict:
+                    if key =="boson_eta" or key =="geladenes_lepton_eta" or key=="jets_fuehrende_Ordnung_eta" or key=="jets_NLO_eta" or key=="jets_NNLO_eta" or key=="jets_NNNLO_eta":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(-5,5)
+                    if key =="boson_invariant_mass":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(50,110)
+                    if key =="boson_transverse_mass":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(0,120)
+                    if key =="jets_anzahl":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(0,8)
+                    if key =="jets_NNLO_pt":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(0,700)
+                    if key =="jets_NNNLO_pt":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(0,500)
             if var_info_dict[key]["dim"] == 2:
                 for key___ in histo_dict:
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitle(var_info_dict[key]["Zaxis"])
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitleSize(0.049)
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetLabelSize(0.05)
+                    if key =="boson_pt_anzahl":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,6)
+                    if key =="boson_pt_eta":
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(-5,5)
                     if key__ == "incl":
                         maximum_incl=histo_dict[key___][key__+"_"+key+"_"+key_].GetMaximum()
                         minimum_incl=histo_dict[key___][key__+"_"+key+"_"+key_].GetMinimum()
