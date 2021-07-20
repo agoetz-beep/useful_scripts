@@ -14,6 +14,8 @@ canvas=ROOT.TCanvas("canvas", "canvas", 4000, 3000)
 legend=ROOT.TLegend(0.15,0.15)
 legend2=ROOT.TLegend(0.15,0.15)
 
+latex=ROOT.TLatex()
+
 corr_factor_dict = { 
                             "" : "",
                             "Vpt_corr_factor_incl" :" mit Korrekturfaktor (Vpt, inklusiver Phasenraum)",
@@ -102,12 +104,12 @@ for key in var_info_dict:
                         minimum_ratio_final = minimum_ratio*0.8
                     else:
                         minimum_ratio_final = minimum_ratio_ana*0.8
-                    #histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
-                    #histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
                     if minimum_LONLO_final<0:
                         histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_LONLO_final)
+                        histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_LONLO_final)
                     else:
                         histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
+                        histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
                     if minimum_ratio_final<0:
                         histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_ratio_final)
                     else:
@@ -140,9 +142,12 @@ for key in var_info_dict:
                             minimum_final = minimum_incl*0.8
                         else:
                             minimum_final = minimum_ana*0.8
-                        histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(minimum_final,maximum_final)
                         if minimum_final<0:
                             histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,maximum_final)
+                        else:
+                            histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(minimum_final,maximum_final)
+                        if key___ == "LO":
+                            maximum_final_LO = maximum_final
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
                 #histo_dict["ratio"][key__+"_"+key+"_"+key_].GetZaxis().SetRangeUser(0,2)
@@ -177,17 +182,23 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("histesame")
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend.Draw("same")
+                latex.SetTextSize(0.05)
+                latex.DrawLatex(-0.5, maximum_LONLO_final*1.1,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
                 if key__ == "ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend2.Draw("same")
+                #latex.Draw("same")
+            #latex.SetText("text")
+            #latex.SetTextAlign(13)
             canvas.Print(boson + "_"+key+"_"+key_+ ".png")
             canvas.Print(boson +"_"+key+"_"+key_+ ".pdf")
             canvas.Clear()
             legend.Clear()
             legend2.Clear()
+            latex.Clear()
         if var_info_dict[key]["dim"] == 2:  
             for key__ in sel_func_dict:
                 canvas.Divide(1,3)
@@ -196,6 +207,8 @@ for key in var_info_dict:
                 #canvas.cd(1).SetTitle("-LO")
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
+                latex.SetTextSize(0.05)
+                latex.DrawLatex(-0.5, maximum_final_LO*1.1,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
                 canvas.cd(2)
                 canvas.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)
@@ -206,8 +219,7 @@ for key in var_info_dict:
                 canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
                 canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
                 canvas.Clear()
-                legend.Clear()
-                legend2.Clear()
+                latex.Clear()
                 
 #file_factors.Close()
 file_LO.Close()
