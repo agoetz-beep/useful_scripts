@@ -106,21 +106,21 @@ for key in var_info_dict:
                         minimum_ratio_final = minimum_ratio*0.8
                     else:
                         minimum_ratio_final = minimum_ratio_ana*0.8
-                    if minimum_LONLO_final<0:
-                        histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_LONLO_final)
-                        histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_LONLO_final)
+                    if minimum_LONLO_final<0 or minimum_LONLO_final==0 :
+                        histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0.001,maximum_LONLO_final)
+                        histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0.001,maximum_LONLO_final)
                     else:
                         histo_dict["LO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
                         histo_dict["NLO"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_LONLO_final,maximum_LONLO_final)
-                    if minimum_ratio_final<0:
-                        histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,maximum_ratio_final)
+                    if minimum_ratio_final<0 or minimum_ratio_final==0:
+                        histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0.001,maximum_ratio_final)
                     else:
                         histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(minimum_ratio_final,maximum_ratio_final)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_])
                 if key =="boson_pt":
                     histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle(var_info_dict[key]["Title"] + corr_factor_dict[key_]+ " mit Theorie-Binning")
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetTitle("")
-                histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikunsquerschnittsverhaeltnis NLO/LO")
+                histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetTitle("Wikungsquerschnittsverhaeltnis NLO/LO")
                 #histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
                 for key___ in histo_dict:
                     if key =="boson_eta" or key =="geladenes_lepton_eta" or key=="jets_fuehrende_Ordnung_eta" or key=="jets_NLO_eta" or key=="jets_NNLO_eta" or key=="jets_NNNLO_eta":
@@ -199,17 +199,14 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("histesame")
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend.Draw("same")
-                latex.SetTextSize(0.05)
-                latex.DrawLatex(-0.5, maximum_LONLO_final*1.1,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
+                latex.SetTextSize(0.03)
+                latex.DrawLatexNDC(0.00001,0.95,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
                 if key__ == "ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend2.Draw("same")
-                #latex.Draw("same")
-            #latex.SetText("text")
-            #latex.SetTextAlign(13)
             canvas.Print(boson + "_"+key+"_"+key_+ ".png")
             canvas.Print(boson +"_"+key+"_"+key_+ ".pdf")
             canvas.Clear()
@@ -224,8 +221,8 @@ for key in var_info_dict:
                 #canvas.cd(1).SetTitle("-LO")
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
-                latex.SetTextSize(0.05)
-                latex.DrawLatex(-0.5, maximum_final_LO*1.1,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
+                latex.SetTextSize(0.03)
+                latex.DrawLatexNDC(0.00001,0.95,"#splitline{{{0}}}{{{1}}}".format("CMS simulation","work in progress"))
                 canvas.cd(2)
                 canvas.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)
