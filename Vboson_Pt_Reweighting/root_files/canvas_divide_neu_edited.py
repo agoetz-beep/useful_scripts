@@ -19,13 +19,13 @@ latex=ROOT.TLatex()
 corr_factor_dict = { 
                             "" : "",
                             "Vpt_corr_factor_incl" :" mit Korrekturfaktor (Vpt, inklusiver Phasenraum)",
-                            "Vpt_theory_binning_corr_factor_incl" : " mit Korrekturfaktor (Vpt, inklusiver Phasenraum, Theorie-Binning)",
+                            "Vpt_theory_binning_corr_factor_incl" : " mit Korrekturfaktor (Vpt, inklusiver #Phasenraum, Theorie-Binning)",
                             "Vpt_corr_factor_ana" : " mit Korrekturfaktor (Vpt, Analysephasenraum)",
-                            "Vpt_theory_binning_corr_factor_ana" : " mit Korrekturfaktor (Vpt, Analysephasenraum, Theorie-Binning)",
-                            "Vpt_Veta_corr_factor_incl" : " mit Korrekturfaktor (Vpt_Veta, inklusiver Phasenraum)",
-                            "Vpt_DeltaPhi_corr_factor_incl" : " mit Korrekturfaktor (Vpt_Deltaphi, inklusiver Phasenraum)",
+                            "Vpt_theory_binning_corr_factor_ana" : " mit Korrekturfaktor (Vpt, Analysephasenraum, #Theorie-Binning)",
+                            "Vpt_Veta_corr_factor_incl" : " mit Korrekturfaktor (Vpt_Veta, inklusiver #Phasenraum)",
+                            "Vpt_DeltaPhi_corr_factor_incl" : " mit Korrekturfaktor (Vpt_Deltaphi, inklusiver #Phasenraum)",
                             "Vpt_HT_corr_factor_incl" : " mit Korrekturfaktor (Vpt_HT, inklusiver Phasenraum)",
-                            "Vpt_anzahl_corr_factor_incl" : " mit Korrekturfaktor (Vpt_anzahl, inklusiver Phasenraum)"
+                            "Vpt_anzahl_corr_factor_incl" : " mit Korrekturfaktor (Vpt_anzahl, inklusiver #Phasenraum)"
                             
                         }
 
@@ -65,7 +65,7 @@ for key in var_info_dict:
                     if key =="boson_eta" or key =="geladenes_lepton_eta" or key=="jets_fuehrende_Ordnung_eta" or key=="jets_NLO_eta" or key=="jets_NNLO_eta" or key=="jets_NNNLO_eta":
                         histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(-5,5)
                     if key =="boson_invariant_mass":
-                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(50,110)
+                        histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(70,130)
                     if key =="boson_transverse_mass":
                         histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(0,120)
                     if key =="jets_anzahl":
@@ -137,7 +137,8 @@ for key in var_info_dict:
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetMinimum(minimum)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMaximum(maximum_ratio)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMinimum(minimum_ratio)
-
+            histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
+            #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
 
             
 for key in var_info_dict:
@@ -165,7 +166,8 @@ for key in var_info_dict:
                 legend.Draw("same")
                 latex.SetTextSize(0.03)
                 latex.DrawLatexNDC(0.1,0.9155,"CMS #it{#bf{private Work}}")
-                latex.DrawLatexNDC(0.766,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.766,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.766,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
@@ -188,7 +190,8 @@ for key in var_info_dict:
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
                 latex.SetTextSize(0.045)
                 latex.DrawLatexNDC(0.1,0.92,"CMS #it{#bf{private Work}}")
-                latex.DrawLatexNDC(0.6679,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.6679,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.6679,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas.cd(2)
                 canvas.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)

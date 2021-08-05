@@ -6,7 +6,7 @@ from array import array
 canvas=ROOT.TCanvas("canvas", "canvas", 2000, 1500)
 boson=sys.argv[1]
 file_hadd=ROOT.TFile.Open(sys.argv[2])
-hist1=file_hadd.Get(boson+ "_incl_boson_pt_Vpt_corr_factor_incl")
+hist1=file_hadd.Get(boson+ "_incl_boson_pt_")
 neue_bin_grenzen=[ 
     30,
     40,

@@ -47,7 +47,7 @@ corrfactor_file=ROOT.TFile.Open(boson + "_factors.root")
 
 # dictionary containing information regarding corrections factors
 corr_factor_dict = { 
-#                            "" : {},
+                            "" : {},
                             "Vpt_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson +"_incl_boson_pt_to1TeV_corr_factor"), "function" : "boson_pt"},
                             "Vpt_theory_binning_corr_factor_incl" : {"dim" : 1, "hist" : corrfactor_file.Get(boson + "_incl_boson_pt_corr_factor"), "function" : "boson_pt"},
                             "Vpt_corr_factor_ana" : {"dim" : 1, "hist" : corrfactor_file.Get(boson +"_ana_boson_pt_to1TeV_corr_factor"), "function" : "boson_pt"},
@@ -292,4 +292,5 @@ for key in histo_dict:
 
 
 file_.Close()
+corrfactor_file.Close()
 print ("finished")

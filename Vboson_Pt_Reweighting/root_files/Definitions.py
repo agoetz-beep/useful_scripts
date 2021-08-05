@@ -3,7 +3,7 @@ import ROOT
 import sys
 from array import array
 
-boson="W"
+boson="Zll"
 
 # binning according to https://arxiv.org/pdf/1705.04664.pdf
 binning = [
@@ -86,10 +86,10 @@ var_info_dict = {
                          "jets_anzahl" : {"dim" : 1, "hist" : ROOT.TH1D(  "jets_anzahl",   "jets_anzahl", 13, -0.5,12.5) , "function" : "njets", "Xaxis": "Anzahl der Jets", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Anzahl der Jets mit pt>=30 GeV, |eta|<=2.4"},
                          "jets_HT" : {"dim" : 1, "hist" : ROOT.TH1D(  "jets_HT",   "jets_HT", len(neue_bin_grenzen) - 1,neue_bins) , "function" : "ht_jets","Xaxis": "Summe der Transversalimpulse aller Jets in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Summe der Transversalimpulse aller Jets mit pt>=30 GeV, |eta|<=2.4"},
                          "boson jets_fuehrende_Ordnung_DeltaPhi" : {"dim" : 1, "hist" : ROOT.TH1D(  "boson jets_fuehrende_Ordnung_DeltaPhi",   "boson jets_fuehrende_Ordnung_DeltaPhi", 20, 0, 3.14) , "function" : "deltaphi_boson_jet0", "Xaxis": "Betrag des Azimutalwinkels", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Betrag des Azimutalwinkels zwischen "+boson+" Boson und f#ddot{u}hrendem Jet"},
-                         "boson_transverse_mass" : {"dim" : 1, "hist" : ROOT.TH1D(  "boson_transverse_mass",   "boson_transverse_mass", 20, 0,100) , "function" : "transverse_mass", "Xaxis": "Transversale Masse in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Transversale Masse des " + boson +" Bosons"},
+                         "boson_transverse_mass" : {"dim" : 1, "hist" : ROOT.TH1D(  "boson_transverse_mass",   "boson_transverse_mass", 20, 0,120) , "function" : "transverse_mass", "Xaxis": "Transversale Masse in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Transversale Masse des " + boson +" Bosons"},
                          "geladenes_lepton_pt" : {"dim" : 1, "hist" : ROOT.TH1D(  "geladenes_lepton_pt",   "geladenes_lepton_pt", len(neue_bin_grenzen) - 1,neue_bins) , "function" : "charged_lepton_pt", "Xaxis": "Transversalimpuls in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Transversalimpuls des geladenen Leptons"},
                          "geladenes_lepton_eta" : {"dim" : 1, "hist" : ROOT.TH1D(  "geladenes_lepton_eta",   "geladenes_lepton_eta", 20, -10, 10) , "function" : "charged_lepton_eta", "Xaxis": "Pseudorapidit#ddot{a}t", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Pseudorapidit#ddot{a}t des geladenen Leptons"},
-                         "boson_invariant_mass" : {"dim" : 1, "hist" : ROOT.TH1D(  "boson_invariant_mass",   "boson_invariant_mass",20, 0, 100) , "function" : "boson_mass", "Xaxis": "Invariante Masse in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Invariante Masse des " + boson +" Bosons"},
+                         "boson_invariant_mass" : {"dim" : 1, "hist" : ROOT.TH1D(  "boson_invariant_mass",   "boson_invariant_mass",20, 0, 110) , "function" : "boson_mass", "Xaxis": "Invariante Masse in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Invariante Masse des " + boson +" Bosons"},
                          "jets_NLO_pt" : {"dim" : 1, "hist" : ROOT.TH1D(  "jets_NLO_pt",  "jets_NLO_pt",len(neue_bin_grenzen) - 1,neue_bins) , "function" : "jet1_pt", "Xaxis": "Transversalimpuls in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Transversalimpuls des zweiten Jets"},
                          "jets_NLO_eta" : {"dim" : 1, "hist" : ROOT.TH1D(  "jets_NLO_eta",  "jets_NLO_eta", 20, -8,8) , "function" : "jet1_eta", "Xaxis": "Pseudorapidit#ddot{a}t", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Pseudorapidit#ddot{a}t des zweiten Jets"},
                          "jets_NNLO_pt" : {"dim" : 1, "hist" : ROOT.TH1D(  "jets_NNLO_pt",  "jets_NNLO_pt",len(neue_bin_grenzen) - 1,neue_bins) , "function" : "jet2_pt", "Xaxis": "Transversalimpuls in GeV", "Yaxis": "Wirkungsquerschnitt in pb pro Bin", "Title": "Transversalimpuls des dritten Jets"},
