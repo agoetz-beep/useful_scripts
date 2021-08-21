@@ -3,7 +3,7 @@ import ROOT
 import sys
 from array import array
 
-boson="Zll"
+boson="W"
 
 # binning according to https://arxiv.org/pdf/1705.04664.pdf
 binning = [
