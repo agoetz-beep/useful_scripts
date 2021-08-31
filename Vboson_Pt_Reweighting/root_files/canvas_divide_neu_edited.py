@@ -10,9 +10,10 @@ file_NLO=ROOT.TFile.Open(sys.argv[3])
 #file_factors=ROOT.TFile(boson + "_factors.root", "RECREATE")
 
 canvas=ROOT.TCanvas("canvas", "canvas", 4000, 3000)
+canvas2=ROOT.TCanvas("canvas2", "canvas2", 4000, 4200)
 
-legend=ROOT.TLegend(0.15,0.15)
-legend2=ROOT.TLegend(0.15,0.15)
+legend=ROOT.TLegend(0.3,0.32)
+legend2=ROOT.TLegend(0.22,0.22)
 
 latex=ROOT.TLatex()
 
@@ -59,8 +60,12 @@ for key in var_info_dict:
                 if var_info_dict[key]["dim"] == 2:
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitle(var_info_dict[key]["Zaxis"])
                     histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().CenterTitle()
-                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitleSize(0.049)
-                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetLabelSize(0.05)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetTitleSize(0.051)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetZaxis().SetLabelSize(0.049)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetTitleSize(0.051)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetYaxis().SetLabelSize(0.049)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetTitleSize(0.051)
+                    histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetLabelSize(0.049)
                 if var_info_dict[key]["dim"] == 1:
                     if key =="boson_eta" or key =="geladenes_lepton_eta" or key=="jets_fuehrende_Ordnung_eta" or key=="jets_NLO_eta" or key=="jets_NNLO_eta" or key=="jets_NNNLO_eta":
                         histo_dict[key___][key__+"_"+key+"_"+key_].GetXaxis().SetRangeUser(-5,5)
@@ -125,8 +130,8 @@ for key in var_info_dict:
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetMinimum(minimum_2d)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMaximum(2)#maximum_ratio_2d
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMinimum(0)#minimum_ratio_2d
-        minimum = max(minimum,0.001)*0.8
-        minimum_ratio = max(minimum_ratio,0.001)*0.8
+        minimum = max(minimum,0.001)*0.008
+        minimum_ratio = max(minimum_ratio,0.001)*0.008
         maximum *= 5
         maximum_ratio *= 1.2
         for key__ in sel_func_dict:
@@ -137,6 +142,8 @@ for key in var_info_dict:
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].SetMinimum(minimum)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMaximum(maximum_ratio)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMinimum(minimum_ratio)
+                if key_ == "Vpt_corr_factor_ana":
+                    histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
             histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
             #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
 
@@ -164,10 +171,10 @@ for key in var_info_dict:
                     histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("histesame")
                     histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("histesame")
                 legend.Draw("same")
-                latex.SetTextSize(0.03)
-                latex.DrawLatexNDC(0.1,0.9155,"CMS simulation #it{#bf{private Work}}")
-                latex.DrawLatexNDC(0.766,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                #latex.DrawLatexNDC(0.766,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                latex.SetTextSize(0.049)
+                latex.DrawLatexNDC(0.1,0.9155,"CMS simulation #it{#bf{work in progress}}")
+                latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
@@ -182,26 +189,26 @@ for key in var_info_dict:
             latex.Clear()
         if var_info_dict[key]["dim"] == 2:  
             for key__ in sel_func_dict:
-                canvas.Divide(1,3)
-                canvas.cd(1)
-                canvas.cd(1).SetLogz(1)
+                canvas2.Divide(1,3)
+                canvas2.cd(1)
+                canvas2.cd(1).SetLogz(1)
                 #canvas.cd(1).SetTitle("-LO")
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
-                latex.SetTextSize(0.045)
-                latex.DrawLatexNDC(0.1,0.92,"CMS simulation #it{#bf{private Work}}")
-                latex.DrawLatexNDC(0.6679,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                #latex.DrawLatexNDC(0.6679,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
-                canvas.cd(2)
-                canvas.cd(2).SetLogz(1)
+                latex.SetTextSize(0.051)
+                latex.DrawLatexNDC(0.1,0.92,"CMS simulation #it{#bf{work in progress}}")
+                latex.DrawLatexNDC(0.59,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.58,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                canvas2.cd(2)
+                canvas2.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["NLO"][key__+"_"+key+"_"+key_].Draw("colz")
-                canvas.cd(3)
+                canvas2.cd(3)
                 ROOT.gPad.SetRightMargin(0.2)
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("colz")
-                canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
-                canvas.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
-                canvas.Clear()
+                canvas2.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".png")
+                canvas2.Print(boson + "_"+key__+"_"+key+"_"+key_+ ".pdf")
+                canvas2.Clear()
                 latex.Clear()
                 
 #file_factors.Close()
