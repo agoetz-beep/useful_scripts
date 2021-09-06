@@ -12,6 +12,7 @@ file_NLO=ROOT.TFile.Open(sys.argv[3])
 canvas=ROOT.TCanvas("canvas", "canvas", 4000, 3000)
 canvas2=ROOT.TCanvas("canvas2", "canvas2", 4000, 4200)
 
+#legend=ROOT.TLegend(0.1,0.1,0.4,0.42)
 legend=ROOT.TLegend(0.3,0.32)
 legend2=ROOT.TLegend(0.22,0.22)
 
@@ -144,6 +145,12 @@ for key in var_info_dict:
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMinimum(minimum_ratio)
                 if key_ == "Vpt_corr_factor_ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
+                #if key == "boson_eta":
+                    #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMinimum(0)
+                    #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMaximum(7000)
+                #if key == "boson jets_fuehrende_Ordnung_DeltaPhi":
+                    #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMinimum(0)
+                    #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMaximum(7000)
             histo_dict["ratio"][key__+"_"+key+"_"+key_].SetName(boson +"_"+key__+"_"+key+"_corr_factor")
             #file_factors.WriteTObject(histo_dict["ratio"][key__+"_"+key+"_"+key_])
 
@@ -173,8 +180,8 @@ for key in var_info_dict:
                 legend.Draw("same")
                 latex.SetTextSize(0.049)
                 latex.DrawLatexNDC(0.1,0.9155,"CMS simulation #it{#bf{work in progress}}")
-                latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                #latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
@@ -197,8 +204,8 @@ for key in var_info_dict:
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
                 latex.SetTextSize(0.051)
                 latex.DrawLatexNDC(0.1,0.92,"CMS simulation #it{#bf{work in progress}}")
-                latex.DrawLatexNDC(0.59,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                #latex.DrawLatexNDC(0.58,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.59,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.58,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas2.cd(2)
                 canvas2.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)
