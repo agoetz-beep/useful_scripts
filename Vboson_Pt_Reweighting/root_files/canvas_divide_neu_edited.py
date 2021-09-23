@@ -15,6 +15,8 @@ canvas2=ROOT.TCanvas("canvas2", "canvas2", 4000, 4200)
 #legend=ROOT.TLegend(0.1,0.1,0.4,0.42)
 legend=ROOT.TLegend(0.3,0.32)
 legend2=ROOT.TLegend(0.22,0.22)
+linie=ROOT.TLine()
+#linie.SetHorizontal()
 
 latex=ROOT.TLatex()
 
@@ -89,6 +91,8 @@ for key in var_info_dict:
         minimum = 99999999999999
         maximum_ratio = -99999999999999
         minimum_ratio = 99999999999999
+        #minimum_xachse=99999999999999
+        #maximum_xachse=-999999999999
         for key__ in sel_func_dict:
             if var_info_dict[key]["dim"] == 1:
                 if key__ == "incl":
@@ -110,6 +114,10 @@ for key in var_info_dict:
                 minimum = min(histo_dict["LO"][key__+"_"+key+"_"+key_].GetMinimum(),histo_dict["NLO"][key__+"_"+key+"_"+key_].GetMinimum(),minimum)
                 maximum_ratio = max(histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMaximum(),maximum_ratio)
                 minimum_ratio = min(histo_dict["ratio"][key__+"_"+key+"_"+key_].GetMinimum(),minimum_ratio)
+                #minimum_xachse=min(histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmin(),minimum_xachse)
+                #maximum_xachse=max(histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmax(),maximum_xachse)
+                #minimum_xachse=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmin()
+                #maximum_xachse=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmax()
             if var_info_dict[key]["dim"] == 2:
                 #histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle("#splitline{{{0}}}{{{1}}}".format(var_info_dict[key]["Title"] + sel_func_dict[key__]["Title"] + corr_factor_dict[key_],"-LO"))
                 histo_dict["LO"][key__+"_"+key+"_"+key_].SetTitle("-LO")
@@ -145,6 +153,8 @@ for key in var_info_dict:
                 histo_dict["ratio"][key__+"_"+key+"_"+key_].SetMinimum(minimum_ratio)
                 if key_ == "Vpt_corr_factor_ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,2)
+                    if key == "boson_pt_to1TeV":
+                        histo_dict["ratio"][key__+"_"+key+"_"+key_].GetYaxis().SetRangeUser(0,1.2)
                 #if key == "boson_eta":
                     #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMinimum(0)
                     #histo_dict["LO"][key__+"_"+key+"_"+key_].SetMaximum(7000)
@@ -180,13 +190,35 @@ for key in var_info_dict:
                 legend.Draw("same")
                 latex.SetTextSize(0.049)
                 latex.DrawLatexNDC(0.1,0.9155,"CMS simulation #it{#bf{work in progress}}")
-                #latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.675,0.9155,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas.cd(2)
                 if key__ == "incl":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histe")
                 if key__ == "ana":
                     histo_dict["ratio"][key__+"_"+key+"_"+key_].Draw("histesame")
+                minimum_xachse=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmin()
+                maximum_xachse=histo_dict["ratio"][key__+"_"+key+"_"+key_].GetXaxis().GetXmax()
+                if key=="jets_anzahl":
+                    maximum_xachse=8.5
+                if key=="boson_eta":
+                    maximum_xachse=5
+                    minimum_xachse=-5
+                if key=="boson_transverse_mass":
+                    maximum_xachse=105
+                if key=="boson_invariant_mass":
+                    maximum_xachse=105
+                    minimum_xachse=70
+                if key=="jets_fuehrende_Ordnung_eta":
+                    maximum_xachse=5.6
+                    minimum_xachse-5.6
+                if key=="geladenes_lepton_eta":
+                    maximum_xachse=5
+                    minimum_xachse=-5
+                #linie=ROOT.Tline(minimum_xachse,1.0,maximum_xachse,1.0)
+                linie.SetLineColor(9)
+                linie.SetLineStyle(9)
+                linie.DrawLine(minimum_xachse,1.0,maximum_xachse,1.0)
                 legend2.Draw("same")
             canvas.Print(boson + "_"+key+"_"+key_+ ".png")
             canvas.Print(boson +"_"+key+"_"+key_+ ".pdf")
@@ -194,6 +226,7 @@ for key in var_info_dict:
             legend.Clear()
             legend2.Clear()
             latex.Clear()
+            linie.Clear()
         if var_info_dict[key]["dim"] == 2:  
             for key__ in sel_func_dict:
                 canvas2.Divide(1,3)
@@ -204,8 +237,8 @@ for key in var_info_dict:
                 histo_dict["LO"][key__+"_"+key+"_"+key_].Draw("colz")
                 latex.SetTextSize(0.051)
                 latex.DrawLatexNDC(0.1,0.92,"CMS simulation #it{#bf{work in progress}}")
-                #latex.DrawLatexNDC(0.59,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
-                latex.DrawLatexNDC(0.58,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
+                latex.DrawLatexNDC(0.59,0.92,"pp #rightarrow W(l#nu) + Jets @ 13 TeV")
+                #latex.DrawLatexNDC(0.58,0.92,"pp #rightarrow Z(l^{#plus}l^{#minus}) + Jets @ 13 TeV")
                 canvas2.cd(2)
                 canvas2.cd(2).SetLogz(1)
                 ROOT.gPad.SetRightMargin(0.2)

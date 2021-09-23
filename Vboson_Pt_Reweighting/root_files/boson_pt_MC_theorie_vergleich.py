@@ -8,6 +8,7 @@ canvas=ROOT.TCanvas("canvas", "canvas", 4000, 3000)
 legend=ROOT.TLegend(0.1,0.1,0.4,0.5)
 legend2=ROOT.TLegend(0.1,0.1,0.4,0.4)
 latex=ROOT.TLatex()
+linie=ROOT.TLine()
 
 boson=sys.argv[1]
 evj_eej=sys.argv[2]
@@ -133,6 +134,9 @@ hist_ratio_LO_MC.Draw("histe")
 hist_ratio_NLO_MC.Draw("histesame")
 hist_ratio_LO_theorie.Draw("histesame")
 hist_ratio_NNLO_theorie.Draw("histesame")
+linie.SetLineColor(2)
+linie.SetLineStyle(9)
+linie.DrawLine(30,1.0,1000.0,1.0)
 legend2.Draw("same")
 
 canvas.Print(boson + "_boson_pt_MC_theorie.pdf")
